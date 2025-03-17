@@ -1,0 +1,47 @@
+#! /usr/bin/vvp
+:ivl_version "12.0 (stable)";
+:ivl_delay_selection "TYPICAL";
+:vpi_time_precision + 0;
+:vpi_module "/usr/lib64/ivl/system.vpi";
+:vpi_module "/usr/lib64/ivl/vhdl_sys.vpi";
+:vpi_module "/usr/lib64/ivl/vhdl_textio.vpi";
+:vpi_module "/usr/lib64/ivl/v2005_math.vpi";
+:vpi_module "/usr/lib64/ivl/va_math.vpi";
+S_0x56095bf1d510 .scope module, "or8way_tb" "or8way_tb" 2 2;
+ .timescale 0 0;
+v0x56095bf67450_0 .var "in", 7 0;
+v0x56095bf67510_0 .net "out", 0 0, L_0x56095bf675e0;  1 drivers
+S_0x56095bf1d6a0 .scope module, "dut" "or8way" 2 7, 3 2 0, S_0x56095bf1d510;
+ .timescale 0 0;
+    .port_info 0 /INPUT 8 "in";
+    .port_info 1 /OUTPUT 1 "out";
+v0x56095bf57480_0 .net "in", 7 0, v0x56095bf67450_0;  1 drivers
+v0x56095bf67330_0 .net "out", 0 0, L_0x56095bf675e0;  alias, 1 drivers
+L_0x56095bf675e0 .reduce/or v0x56095bf67450_0;
+    .scope S_0x56095bf1d510;
+T_0 ;
+    %vpi_call 2 11 "$monitor", "Time=%0t in=%b out=%b", $time, v0x56095bf67450_0, v0x56095bf67510_0 {0 0 0};
+    %pushi/vec4 0, 0, 8;
+    %store/vec4 v0x56095bf67450_0, 0, 8;
+    %delay 10, 0;
+    %pushi/vec4 1, 0, 8;
+    %store/vec4 v0x56095bf67450_0, 0, 8;
+    %delay 10, 0;
+    %pushi/vec4 16, 0, 8;
+    %store/vec4 v0x56095bf67450_0, 0, 8;
+    %delay 10, 0;
+    %pushi/vec4 255, 0, 8;
+    %store/vec4 v0x56095bf67450_0, 0, 8;
+    %delay 10, 0;
+    %pushi/vec4 85, 0, 8;
+    %store/vec4 v0x56095bf67450_0, 0, 8;
+    %delay 10, 0;
+    %vpi_call 2 20 "$finish" {0 0 0};
+    %end;
+    .thread T_0;
+# The file index is used to find the file name in the following table.
+:file_names 4;
+    "N/A";
+    "<interactive>";
+    "or8-test.v";
+    "or8.v";

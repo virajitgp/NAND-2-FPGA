@@ -1,0 +1,55 @@
+#! /usr/bin/vvp
+:ivl_version "12.0 (stable)";
+:ivl_delay_selection "TYPICAL";
+:vpi_time_precision + 0;
+:vpi_module "/usr/lib64/ivl/system.vpi";
+:vpi_module "/usr/lib64/ivl/vhdl_sys.vpi";
+:vpi_module "/usr/lib64/ivl/vhdl_textio.vpi";
+:vpi_module "/usr/lib64/ivl/v2005_math.vpi";
+:vpi_module "/usr/lib64/ivl/va_math.vpi";
+S_0x564444b24280 .scope module, "and_gate_tb" "and_gate_tb" 2 2;
+ .timescale 0 0;
+v0x564444b361d0_0 .var "a", 0 0;
+v0x564444b36270_0 .var "b", 0 0;
+v0x564444b36310_0 .net "out", 0 0, L_0x564444b36410;  1 drivers
+S_0x564444b24410 .scope module, "dut" "and_gate" 2 7, 3 2 0, S_0x564444b24280;
+ .timescale 0 0;
+    .port_info 0 /INPUT 1 "a";
+    .port_info 1 /INPUT 1 "b";
+    .port_info 2 /OUTPUT 1 "out";
+L_0x564444b36410 .functor AND 1, v0x564444b361d0_0, v0x564444b36270_0, C4<1>, C4<1>;
+v0x564444aeb470_0 .net "a", 0 0, v0x564444b361d0_0;  1 drivers
+v0x564444b35ff0_0 .net "b", 0 0, v0x564444b36270_0;  1 drivers
+v0x564444b360b0_0 .net "out", 0 0, L_0x564444b36410;  alias, 1 drivers
+    .scope S_0x564444b24280;
+T_0 ;
+    %vpi_call 2 11 "$monitor", "Time=%0t a=%b b=%b out=%b", $time, v0x564444b361d0_0, v0x564444b36270_0, v0x564444b36310_0 {0 0 0};
+    %pushi/vec4 0, 0, 1;
+    %store/vec4 v0x564444b361d0_0, 0, 1;
+    %pushi/vec4 0, 0, 1;
+    %store/vec4 v0x564444b36270_0, 0, 1;
+    %delay 10, 0;
+    %pushi/vec4 0, 0, 1;
+    %store/vec4 v0x564444b361d0_0, 0, 1;
+    %pushi/vec4 1, 0, 1;
+    %store/vec4 v0x564444b36270_0, 0, 1;
+    %delay 10, 0;
+    %pushi/vec4 1, 0, 1;
+    %store/vec4 v0x564444b361d0_0, 0, 1;
+    %pushi/vec4 0, 0, 1;
+    %store/vec4 v0x564444b36270_0, 0, 1;
+    %delay 10, 0;
+    %pushi/vec4 1, 0, 1;
+    %store/vec4 v0x564444b361d0_0, 0, 1;
+    %pushi/vec4 1, 0, 1;
+    %store/vec4 v0x564444b36270_0, 0, 1;
+    %delay 10, 0;
+    %vpi_call 2 19 "$finish" {0 0 0};
+    %end;
+    .thread T_0;
+# The file index is used to find the file name in the following table.
+:file_names 4;
+    "N/A";
+    "<interactive>";
+    "and2-test.v";
+    "and2.v";

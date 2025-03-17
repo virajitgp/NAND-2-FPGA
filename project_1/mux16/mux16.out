@@ -1,0 +1,66 @@
+#! /usr/bin/vvp
+:ivl_version "12.0 (stable)";
+:ivl_delay_selection "TYPICAL";
+:vpi_time_precision + 0;
+:vpi_module "/usr/lib64/ivl/system.vpi";
+:vpi_module "/usr/lib64/ivl/vhdl_sys.vpi";
+:vpi_module "/usr/lib64/ivl/vhdl_textio.vpi";
+:vpi_module "/usr/lib64/ivl/v2005_math.vpi";
+:vpi_module "/usr/lib64/ivl/va_math.vpi";
+S_0x55fc6229f510 .scope module, "mux16_tb" "mux16_tb" 2 2;
+ .timescale 0 0;
+v0x55fc622ec890_0 .var "a", 15 0;
+v0x55fc622ec970_0 .var "b", 15 0;
+v0x55fc622eca10_0 .net "out", 15 0, L_0x55fc622ecbe0;  1 drivers
+v0x55fc622ecb10_0 .var "sel", 0 0;
+S_0x55fc6229f6a0 .scope module, "dut" "mux16" 2 8, 3 2 0, S_0x55fc6229f510;
+ .timescale 0 0;
+    .port_info 0 /INPUT 16 "a";
+    .port_info 1 /INPUT 16 "b";
+    .port_info 2 /INPUT 1 "sel";
+    .port_info 3 /OUTPUT 16 "out";
+v0x55fc622da9b0_0 .net "a", 15 0, v0x55fc622ec890_0;  1 drivers
+v0x55fc622ec5b0_0 .net "b", 15 0, v0x55fc622ec970_0;  1 drivers
+v0x55fc622ec690_0 .net "out", 15 0, L_0x55fc622ecbe0;  alias, 1 drivers
+v0x55fc622ec750_0 .net "sel", 0 0, v0x55fc622ecb10_0;  1 drivers
+L_0x55fc622ecbe0 .functor MUXZ 16, v0x55fc622ec890_0, v0x55fc622ec970_0, v0x55fc622ecb10_0, C4<>;
+    .scope S_0x55fc6229f510;
+T_0 ;
+    %vpi_call 2 12 "$monitor", "Time=%0t a=%h b=%h sel=%b out=%h", $time, v0x55fc622ec890_0, v0x55fc622ec970_0, v0x55fc622ecb10_0, v0x55fc622eca10_0 {0 0 0};
+    %pushi/vec4 43690, 0, 16;
+    %store/vec4 v0x55fc622ec890_0, 0, 16;
+    %pushi/vec4 21845, 0, 16;
+    %store/vec4 v0x55fc622ec970_0, 0, 16;
+    %pushi/vec4 0, 0, 1;
+    %store/vec4 v0x55fc622ecb10_0, 0, 1;
+    %delay 10, 0;
+    %pushi/vec4 43690, 0, 16;
+    %store/vec4 v0x55fc622ec890_0, 0, 16;
+    %pushi/vec4 21845, 0, 16;
+    %store/vec4 v0x55fc622ec970_0, 0, 16;
+    %pushi/vec4 1, 0, 1;
+    %store/vec4 v0x55fc622ecb10_0, 0, 1;
+    %delay 10, 0;
+    %pushi/vec4 0, 0, 16;
+    %store/vec4 v0x55fc622ec890_0, 0, 16;
+    %pushi/vec4 65535, 0, 16;
+    %store/vec4 v0x55fc622ec970_0, 0, 16;
+    %pushi/vec4 0, 0, 1;
+    %store/vec4 v0x55fc622ecb10_0, 0, 1;
+    %delay 10, 0;
+    %pushi/vec4 0, 0, 16;
+    %store/vec4 v0x55fc622ec890_0, 0, 16;
+    %pushi/vec4 65535, 0, 16;
+    %store/vec4 v0x55fc622ec970_0, 0, 16;
+    %pushi/vec4 1, 0, 1;
+    %store/vec4 v0x55fc622ecb10_0, 0, 1;
+    %delay 10, 0;
+    %vpi_call 2 20 "$finish" {0 0 0};
+    %end;
+    .thread T_0;
+# The file index is used to find the file name in the following table.
+:file_names 4;
+    "N/A";
+    "<interactive>";
+    "mux16-test.v";
+    "mux16.v";

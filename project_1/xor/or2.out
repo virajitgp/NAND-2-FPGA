@@ -1,0 +1,55 @@
+#! /usr/bin/vvp
+:ivl_version "12.0 (stable)";
+:ivl_delay_selection "TYPICAL";
+:vpi_time_precision + 0;
+:vpi_module "/usr/lib64/ivl/system.vpi";
+:vpi_module "/usr/lib64/ivl/vhdl_sys.vpi";
+:vpi_module "/usr/lib64/ivl/vhdl_textio.vpi";
+:vpi_module "/usr/lib64/ivl/v2005_math.vpi";
+:vpi_module "/usr/lib64/ivl/va_math.vpi";
+S_0x5648368b99f0 .scope module, "xor_gate_tb" "xor_gate_tb" 2 2;
+ .timescale 0 0;
+v0x5648368ca1d0_0 .var "a", 0 0;
+v0x5648368ca270_0 .var "b", 0 0;
+v0x5648368ca310_0 .net "out", 0 0, L_0x5648368ca410;  1 drivers
+S_0x5648368b9b80 .scope module, "dut" "xor_gate" 2 7, 3 2 0, S_0x5648368b99f0;
+ .timescale 0 0;
+    .port_info 0 /INPUT 1 "a";
+    .port_info 1 /INPUT 1 "b";
+    .port_info 2 /OUTPUT 1 "out";
+L_0x5648368ca410 .functor XOR 1, v0x5648368ca1d0_0, v0x5648368ca270_0, C4<0>, C4<0>;
+v0x56483687f470_0 .net "a", 0 0, v0x5648368ca1d0_0;  1 drivers
+v0x5648368c9ff0_0 .net "b", 0 0, v0x5648368ca270_0;  1 drivers
+v0x5648368ca0b0_0 .net "out", 0 0, L_0x5648368ca410;  alias, 1 drivers
+    .scope S_0x5648368b99f0;
+T_0 ;
+    %vpi_call 2 11 "$monitor", "Time=%0t a=%b b=%b out=%b", $time, v0x5648368ca1d0_0, v0x5648368ca270_0, v0x5648368ca310_0 {0 0 0};
+    %pushi/vec4 0, 0, 1;
+    %store/vec4 v0x5648368ca1d0_0, 0, 1;
+    %pushi/vec4 0, 0, 1;
+    %store/vec4 v0x5648368ca270_0, 0, 1;
+    %delay 10, 0;
+    %pushi/vec4 0, 0, 1;
+    %store/vec4 v0x5648368ca1d0_0, 0, 1;
+    %pushi/vec4 1, 0, 1;
+    %store/vec4 v0x5648368ca270_0, 0, 1;
+    %delay 10, 0;
+    %pushi/vec4 1, 0, 1;
+    %store/vec4 v0x5648368ca1d0_0, 0, 1;
+    %pushi/vec4 0, 0, 1;
+    %store/vec4 v0x5648368ca270_0, 0, 1;
+    %delay 10, 0;
+    %pushi/vec4 1, 0, 1;
+    %store/vec4 v0x5648368ca1d0_0, 0, 1;
+    %pushi/vec4 1, 0, 1;
+    %store/vec4 v0x5648368ca270_0, 0, 1;
+    %delay 10, 0;
+    %vpi_call 2 19 "$finish" {0 0 0};
+    %end;
+    .thread T_0;
+# The file index is used to find the file name in the following table.
+:file_names 4;
+    "N/A";
+    "<interactive>";
+    "xor-test.v";
+    "xor.v";
