@@ -1,6 +1,6 @@
 # NAND-2-FPGA
 
-
+```
 ├── project_1
 │   ├── 4-16mux
 │   │   ├── 4-16mux.v
@@ -101,7 +101,7 @@
     ├── test.out
     ├── test.v
     └── test.vcd
-
+```
 
 A repo containing the files, resources and code to impliment a functional CPU based on the HACK(nand2tetris) architecture on a FPGA
 
