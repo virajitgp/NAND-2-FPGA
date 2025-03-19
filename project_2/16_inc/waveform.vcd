@@ -1,0 +1,502 @@
+$date
+	Tue Mar 18 19:42:20 2025
+$end
+$version
+	Icarus Verilog
+$end
+$timescale
+	1ps
+$end
+$scope module tb_incrementor_16bit $end
+$var wire 16 ! sum [15:0] $end
+$var wire 1 " cout $end
+$var reg 16 # a [15:0] $end
+$scope module uut $end
+$var wire 16 $ a [15:0] $end
+$var wire 16 % sum [15:0] $end
+$var wire 1 " cout $end
+$var wire 16 & carry [15:0] $end
+$scope begin adder[0] $end
+$var parameter 2 ' i $end
+$scope begin genblk1 $end
+$scope module fa $end
+$var wire 1 ( a $end
+$var wire 1 ) b $end
+$var wire 1 * cin $end
+$var wire 1 + sum $end
+$var wire 1 , cout $end
+$upscope $end
+$upscope $end
+$upscope $end
+$scope begin adder[1] $end
+$var parameter 2 - i $end
+$scope begin genblk1 $end
+$scope module fa $end
+$var wire 1 . a $end
+$var wire 1 / b $end
+$var wire 1 0 cin $end
+$var wire 1 1 sum $end
+$var wire 1 2 cout $end
+$upscope $end
+$upscope $end
+$upscope $end
+$scope begin adder[2] $end
+$var parameter 3 3 i $end
+$scope begin genblk1 $end
+$scope module fa $end
+$var wire 1 4 a $end
+$var wire 1 5 b $end
+$var wire 1 6 cin $end
+$var wire 1 7 sum $end
+$var wire 1 8 cout $end
+$upscope $end
+$upscope $end
+$upscope $end
+$scope begin adder[3] $end
+$var parameter 3 9 i $end
+$scope begin genblk1 $end
+$scope module fa $end
+$var wire 1 : a $end
+$var wire 1 ; b $end
+$var wire 1 < cin $end
+$var wire 1 = sum $end
+$var wire 1 > cout $end
+$upscope $end
+$upscope $end
+$upscope $end
+$scope begin adder[4] $end
+$var parameter 4 ? i $end
+$scope begin genblk1 $end
+$scope module fa $end
+$var wire 1 @ a $end
+$var wire 1 A b $end
+$var wire 1 B cin $end
+$var wire 1 C sum $end
+$var wire 1 D cout $end
+$upscope $end
+$upscope $end
+$upscope $end
+$scope begin adder[5] $end
+$var parameter 4 E i $end
+$scope begin genblk1 $end
+$scope module fa $end
+$var wire 1 F a $end
+$var wire 1 G b $end
+$var wire 1 H cin $end
+$var wire 1 I sum $end
+$var wire 1 J cout $end
+$upscope $end
+$upscope $end
+$upscope $end
+$scope begin adder[6] $end
+$var parameter 4 K i $end
+$scope begin genblk1 $end
+$scope module fa $end
+$var wire 1 L a $end
+$var wire 1 M b $end
+$var wire 1 N cin $end
+$var wire 1 O sum $end
+$var wire 1 P cout $end
+$upscope $end
+$upscope $end
+$upscope $end
+$scope begin adder[7] $end
+$var parameter 4 Q i $end
+$scope begin genblk1 $end
+$scope module fa $end
+$var wire 1 R a $end
+$var wire 1 S b $end
+$var wire 1 T cin $end
+$var wire 1 U sum $end
+$var wire 1 V cout $end
+$upscope $end
+$upscope $end
+$upscope $end
+$scope begin adder[8] $end
+$var parameter 5 W i $end
+$scope begin genblk1 $end
+$scope module fa $end
+$var wire 1 X a $end
+$var wire 1 Y b $end
+$var wire 1 Z cin $end
+$var wire 1 [ sum $end
+$var wire 1 \ cout $end
+$upscope $end
+$upscope $end
+$upscope $end
+$scope begin adder[9] $end
+$var parameter 5 ] i $end
+$scope begin genblk1 $end
+$scope module fa $end
+$var wire 1 ^ a $end
+$var wire 1 _ b $end
+$var wire 1 ` cin $end
+$var wire 1 a sum $end
+$var wire 1 b cout $end
+$upscope $end
+$upscope $end
+$upscope $end
+$scope begin adder[10] $end
+$var parameter 5 c i $end
+$scope begin genblk1 $end
+$scope module fa $end
+$var wire 1 d a $end
+$var wire 1 e b $end
+$var wire 1 f cin $end
+$var wire 1 g sum $end
+$var wire 1 h cout $end
+$upscope $end
+$upscope $end
+$upscope $end
+$scope begin adder[11] $end
+$var parameter 5 i i $end
+$scope begin genblk1 $end
+$scope module fa $end
+$var wire 1 j a $end
+$var wire 1 k b $end
+$var wire 1 l cin $end
+$var wire 1 m sum $end
+$var wire 1 n cout $end
+$upscope $end
+$upscope $end
+$upscope $end
+$scope begin adder[12] $end
+$var parameter 5 o i $end
+$scope begin genblk1 $end
+$scope module fa $end
+$var wire 1 p a $end
+$var wire 1 q b $end
+$var wire 1 r cin $end
+$var wire 1 s sum $end
+$var wire 1 t cout $end
+$upscope $end
+$upscope $end
+$upscope $end
+$scope begin adder[13] $end
+$var parameter 5 u i $end
+$scope begin genblk1 $end
+$scope module fa $end
+$var wire 1 v a $end
+$var wire 1 w b $end
+$var wire 1 x cin $end
+$var wire 1 y sum $end
+$var wire 1 z cout $end
+$upscope $end
+$upscope $end
+$upscope $end
+$scope begin adder[14] $end
+$var parameter 5 { i $end
+$scope begin genblk1 $end
+$scope module fa $end
+$var wire 1 | a $end
+$var wire 1 } b $end
+$var wire 1 ~ cin $end
+$var wire 1 !" sum $end
+$var wire 1 "" cout $end
+$upscope $end
+$upscope $end
+$upscope $end
+$scope begin adder[15] $end
+$var parameter 5 #" i $end
+$scope begin genblk1 $end
+$scope module fa $end
+$var wire 1 $" a $end
+$var wire 1 %" b $end
+$var wire 1 &" cin $end
+$var wire 1 '" sum $end
+$var wire 1 (" cout $end
+$upscope $end
+$upscope $end
+$upscope $end
+$upscope $end
+$upscope $end
+$enddefinitions $end
+$comment Show the parameter values. $end
+$dumpall
+b1111 #"
+b1110 {
+b1101 u
+b1100 o
+b1011 i
+b1010 c
+b1001 ]
+b1000 W
+b111 Q
+b110 K
+b101 E
+b100 ?
+b11 9
+b10 3
+b1 -
+b0 '
+$end
+#0
+$dumpvars
+0("
+0'"
+0&"
+0%"
+0$"
+0""
+0!"
+0~
+0}
+0|
+0z
+0y
+0x
+0w
+0v
+0t
+0s
+0r
+0q
+0p
+0n
+0m
+0l
+0k
+0j
+0h
+0g
+0f
+0e
+0d
+0b
+0a
+0`
+0_
+0^
+0\
+0[
+0Z
+0Y
+0X
+0V
+0U
+0T
+0S
+0R
+0P
+0O
+0N
+0M
+0L
+0J
+0I
+0H
+0G
+0F
+0D
+0C
+0B
+0A
+0@
+0>
+0=
+0<
+0;
+0:
+08
+07
+06
+05
+04
+02
+01
+00
+0/
+0.
+0,
+1+
+0*
+1)
+0(
+b0 &
+b1 %
+b0 $
+b0 #
+0"
+b1 !
+$end
+#10000
+11
+10
+b10 !
+b10 %
+0+
+b1 &
+1,
+1(
+b1 #
+b1 $
+#20000
+1'"
+1&"
+1""
+1~
+1z
+1x
+1t
+1r
+1n
+1l
+1h
+1f
+1b
+1`
+1\
+1Z
+1V
+1T
+1P
+1N
+1J
+1H
+1D
+1B
+1>
+1<
+18
+16
+01
+b111111111111111 &
+12
+07
+0=
+0C
+0I
+0O
+0U
+0[
+0a
+0g
+0m
+0s
+0y
+b1000000000000000 !
+b1000000000000000 %
+0!"
+1.
+14
+1:
+1@
+1F
+1L
+1R
+1X
+1^
+1d
+1j
+1p
+1v
+1|
+b111111111111111 #
+b111111111111111 $
+#30000
+1"
+b0 !
+b0 %
+0'"
+b1111111111111111 &
+1("
+1$"
+b1111111111111111 #
+b1111111111111111 $
+#40000
+0N
+1I
+0J
+0<
+0H
+0f
+0x
+17
+08
+1C
+0D
+1a
+0b
+1s
+0t
+00
+06
+0B
+0T
+0Z
+0`
+0l
+0r
+0~
+0&"
+0"
+1+
+0,
+01
+02
+0=
+0>
+0O
+0P
+0U
+0V
+0[
+0\
+0g
+0h
+0m
+0n
+0y
+0z
+0!"
+0""
+b1001000110101 !
+b1001000110101 %
+0'"
+b0 &
+0("
+0(
+0.
+0:
+0L
+0R
+0X
+0d
+0j
+0v
+0|
+0$"
+b1001000110100 #
+b1001000110100 $
+#50000
+11
+10
+0+
+b1 &
+1,
+1=
+0C
+0I
+1O
+1U
+1[
+1m
+0s
+1y
+b1010101111001110 !
+b1010101111001110 %
+1'"
+1(
+1:
+0@
+0F
+1L
+1R
+1X
+1j
+0p
+1v
+1$"
+b1010101111001101 #
+b1010101111001101 $
+#60000

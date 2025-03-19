@@ -15,6 +15,7 @@
 +incdir+/home/neo/NAND-2-FPGA/project_1/or2
 +incdir+/home/neo/NAND-2-FPGA/project_1/xor
 +incdir+/home/neo/NAND-2-FPGA/project_2
++incdir+/home/neo/NAND-2-FPGA/project_2/full_adder
 +incdir+/home/neo/NAND-2-FPGA/project_2/half_adder
 +incdir+/home/neo/NAND-2-FPGA/trying_verilog
 +incdir+/home/neo/NAND-2-FPGA/project_1/4-16mux
@@ -34,5 +35,6 @@
 +incdir+/home/neo/NAND-2-FPGA/project_1/or2
 +incdir+/home/neo/NAND-2-FPGA/project_1/xor
 +incdir+/home/neo/NAND-2-FPGA/project_2
++incdir+/home/neo/NAND-2-FPGA/project_2/full_adder
 +incdir+/home/neo/NAND-2-FPGA/project_2/half_adder
 +incdir+/home/neo/NAND-2-FPGA/trying_verilog
