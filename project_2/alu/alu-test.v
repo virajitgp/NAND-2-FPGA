@@ -2,10 +2,10 @@
 
 module alu_tb();
     // Test signals
-    reg [7:0] a;
-    reg [7:0] b;
+    reg [15:0] a;
+    reg [15:0] b;
     reg [3:0] op_code;
-    wire [7:0] result;
+    wire [15:0] result;
     wire zero_flag;
     wire carry_flag;
     wire overflow_flag;
@@ -23,7 +23,7 @@ module alu_tb();
     
     // Helper tasks
     task display_result;
-        input [7:0] expected_result;
+        input [15:0] expected_result;
         input expected_zero;
         input expected_carry;
         input expected_overflow;
@@ -49,73 +49,70 @@ module alu_tb();
     
     // Test stimulus
     initial begin
-        $display("Starting ALU Testbench");
+        $display("Starting 16-bit ALU Testbench");
         
         // Test addition
-        a = 8'd10; b = 8'd20; op_code = 4'b0000;
-        #10 display_result(8'd30, 0, 0, 0);
+        a = 16'd1000; b = 16'd2000; op_code = 4'b0000;
+        #10 display_result(16'd3000, 0, 0, 0);
         
         // Test addition with carry
-        a = 8'd200; b = 8'd100; op_code = 4'b0000;
-        #10 display_result(8'd44, 0, 1, 0); // 300 % 256 = 44, with carry
+        a = 16'd40000; b = 16'd30000; op_code = 4'b0000;
+        #10 display_result(16'd4464, 0, 1, 0); // 70000 % 65536 = 4464, with carry
         
         // Test addition with overflow
-        a = 8'd100; b = 8'd100; op_code = 4'b0000;
-        #10 display_result(8'd200, 0, 0, 0);
-        
-        a = 8'h7F; b = 8'h01; op_code = 4'b0000; // 127 + 1 = 128 (overflow)
-        #10 display_result(8'h80, 0, 0, 1);
+        a = 16'h7FFF; b = 16'h0001; op_code = 4'b0000; // 32767 + 1 = 32768 (overflow)
+        #10 display_result(16'h8000, 0, 0, 1);
         
         // Test subtraction
-        a = 8'd50; b = 8'd20; op_code = 4'b0001;
-        #10 display_result(8'd30, 0, 0, 0);
+        a = 16'd5000; b = 16'd2000; op_code = 4'b0001;
+        #10 display_result(16'd3000, 0, 0, 0);
         
         // Test subtraction with borrow
-        a = 8'd10; b = 8'd20; op_code = 4'b0001;
-        #10 display_result(8'd246, 0, 1, 0); // -10 = 246 in two's complement
+        a = 16'd1000; b = 16'd2000; op_code = 4'b0001;
+        #10 display_result(16'd64536, 0, 1, 0); // -1000 = 64536 in two's complement
         
         // Test subtraction with overflow
-        a = 8'h80; b = 8'h01; op_code = 4'b0001; // -128 - 1 = -129 (overflow)
-        #10 display_result(8'h7F, 0, 1, 1);
+        a = 16'h8000; b = 16'h0001; op_code = 4'b0001; // -32768 - 1 = -32769 (overflow)
+        #10 display_result(16'h7FFF, 0, 1, 1);
         
         // Test logical operations
-        a = 8'hAA; b = 8'h55; op_code = 4'b0010; // AND
-        #10 display_result(8'h00, 1, 0, 0);
+        a = 16'hAAAA; b = 16'h5555; op_code = 4'b0010; // AND
+        #10 display_result(16'h0000, 1, 0, 0);
         
-        a = 8'hAA; b = 8'h55; op_code = 4'b0011; // OR
-        #10 display_result(8'hFF, 0, 0, 0);
+        a = 16'hAAAA; b = 16'h5555; op_code = 4'b0011; // OR
+        #10 display_result(16'hFFFF, 0, 0, 0);
         
-        a = 8'hAA; b = 8'h55; op_code = 4'b0100; // XOR
-        #10 display_result(8'hFF, 0, 0, 0);
+        a = 16'hAAAA; b = 16'h5555; op_code = 4'b0100; // XOR
+        #10 display_result(16'hFFFF, 0, 0, 0);
         
-        a = 8'hAA; b = 8'h00; op_code = 4'b0101; // NOT
-        #10 display_result(8'h55, 0, 0, 0);
+        a = 16'hAAAA; b = 16'h0000; op_code = 4'b0101; // NOT
+        #10 display_result(16'h5555, 0, 0, 0);
         
         // Test shifts
-        a = 8'h01; b = 8'h03; op_code = 4'b0110; // SHL
-        #10 display_result(8'h08, 0, 0, 0);
+        a = 16'h0001; b = 16'h0008; op_code = 4'b0110; // SHL
+        #10 display_result(16'h0100, 0, 0, 0);
         
-        a = 8'h80; b = 8'h03; op_code = 4'b0111; // SHR
-        #10 display_result(8'h10, 0, 0, 0);
+        a = 16'h8000; b = 16'h0008; op_code = 4'b0111; // SHR
+        #10 display_result(16'h0080, 0, 0, 0);
         
         // Test comparisons
-        a = 8'd10; b = 8'd10; op_code = 4'b1000; // CMPEQ
-        #10 display_result(8'h01, 0, 0, 0);
+        a = 16'd1000; b = 16'd1000; op_code = 4'b1000; // CMPEQ
+        #10 display_result(16'h0001, 0, 0, 0);
         
-        a = 8'd5; b = 8'd10; op_code = 4'b1001; // CMPLT
-        #10 display_result(8'h01, 0, 0, 0);
+        a = 16'd500; b = 16'd1000; op_code = 4'b1001; // CMPLT
+        #10 display_result(16'h0001, 0, 0, 0);
         
-        a = 8'd10; b = 8'd10; op_code = 4'b1010; // CMPLE
-        #10 display_result(8'h01, 0, 0, 0);
+        a = 16'd1000; b = 16'd1000; op_code = 4'b1010; // CMPLE
+        #10 display_result(16'h0001, 0, 0, 0);
         
         // Test multiplication
-        a = 8'd10; b = 8'd5; op_code = 4'b1011; // MUL
-        #10 display_result(8'd50, 0, 0, 0);
+        a = 16'd100; b = 16'd50; op_code = 4'b1011; // MUL
+        #10 display_result(16'd5000, 0, 0, 0);
         
-        a = 8'd20; b = 8'd20; op_code = 4'b1011; // MUL with carry
-        #10 display_result(8'd144, 0, 1, 0); // 400 % 256 = 144, with carry
+        a = 16'd1000; b = 16'd1000; op_code = 4'b1011; // MUL with carry
+        #10 display_result(16'd16960, 0, 1, 0); // 1000000 % 65536 = 16960, with carry
         
-        $display("ALU Testbench Complete");
+        $display("16-bit ALU Testbench Complete");
         $finish;
     end
     

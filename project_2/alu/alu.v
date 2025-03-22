@@ -1,9 +1,8 @@
-// owner: virajitgp; ALU behavioral verilog
 module alu(
-    input [7:0] a,         // 8-bit input operand A
-    input [7:0] b,         // 8-bit input operand B
+    input [15:0] a,        // 16-bit input operand A
+    input [15:0] b,        // 16-bit input operand B
     input [3:0] op_code,   // 4-bit operation code
-    output reg [7:0] result,   // 8-bit output result
+    output reg [15:0] result,  // 16-bit output result
     output reg zero_flag,      // Set when result is zero
     output reg carry_flag,     // Set when operation produces a carry
     output reg overflow_flag   // Set when operation produces an overflow
@@ -24,8 +23,8 @@ module alu(
     parameter MUL = 4'b1011;   // Multiplication
 
     // Temporary variables for calculations
-    reg [8:0] temp;    // 9-bit temp for carry detection
-    reg [15:0] mul_temp; // 16-bit temp for multiplication
+    reg [16:0] temp;       // 17-bit temp for carry detection
+    reg [31:0] mul_temp;   // 32-bit temp for multiplication
 
     always @(*) begin
         // Default flag values
@@ -36,20 +35,20 @@ module alu(
         case(op_code)
             ADD: begin
                 temp = a + b;
-                result = temp[7:0];
-                carry_flag = temp[8];
+                result = temp[15:0];
+                carry_flag = temp[16];
                 // Overflow occurs when adding two numbers of the same sign
                 // and the result has a different sign
-                overflow_flag = (a[7] == b[7]) && (result[7] != a[7]);
+                overflow_flag = (a[15] == b[15]) && (result[15] != a[15]);
             end
             
             SUB: begin
                 temp = a - b;
-                result = temp[7:0];
-                carry_flag = temp[8];
+                result = temp[15:0];
+                carry_flag = temp[16];
                 // Overflow occurs when subtracting numbers of different signs
                 // and the result has a different sign than the first operand
-                overflow_flag = (a[7] != b[7]) && (result[7] != a[7]);
+                overflow_flag = (a[15] != b[15]) && (result[15] != a[15]);
             end
             
             AND: begin
@@ -69,46 +68,46 @@ module alu(
             end
             
             SHL: begin
-                result = a << b[2:0]; // Use only lower 3 bits of B for shift amount
+                result = a << b[3:0]; // Use only lower 4 bits of B for shift amount (max 16 positions)
                 // Carry is the last bit shifted out
-                if (b[2:0] > 0)
-                    carry_flag = (b[2:0] > 7) ? 0 : a[8-b[2:0]];
+                if (b[3:0] > 0)
+                    carry_flag = (b[3:0] > 15) ? 0 : a[16-b[3:0]];
             end
             
             SHR: begin
-                result = a >> b[2:0]; // Use only lower 3 bits of B for shift amount
+                result = a >> b[3:0]; // Use only lower 4 bits of B for shift amount (max 16 positions)
                 // Carry is the last bit shifted out
-                if (b[2:0] > 0)
-                    carry_flag = (b[2:0] > 7) ? 0 : a[b[2:0]-1];
+                if (b[3:0] > 0)
+                    carry_flag = (b[3:0] > 15) ? 0 : a[b[3:0]-1];
             end
             
             CMPEQ: begin
-                result = (a == b) ? 8'h01 : 8'h00;
+                result = (a == b) ? 16'h0001 : 16'h0000;
             end
             
             CMPLT: begin
-                result = ($signed(a) < $signed(b)) ? 8'h01 : 8'h00;
+                result = ($signed(a) < $signed(b)) ? 16'h0001 : 16'h0000;
             end
             
             CMPLE: begin
-                result = ($signed(a) <= $signed(b)) ? 8'h01 : 8'h00;
+                result = ($signed(a) <= $signed(b)) ? 16'h0001 : 16'h0000;
             end
             
             MUL: begin
                 mul_temp = a * b;
-                result = mul_temp[7:0];
+                result = mul_temp[15:0];
                 // Carry flag if upper bits are non-zero
-                carry_flag = |mul_temp[15:8];
+                carry_flag = |mul_temp[31:16];
                 // No defined overflow for multiplication in this ALU
             end
             
             default: begin
-                result = 8'h00;
+                result = 16'h0000;
             end
         endcase
         
         // Set zero flag if result is zero
-        zero_flag = (result == 8'h00);
+        zero_flag = (result == 16'h0000);
     end
 
 endmodule
