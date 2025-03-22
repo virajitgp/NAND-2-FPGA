@@ -1,4 +1,4 @@
-# NAND-2-FPGA
+https://www.nand2tetris.org/# NAND-2-FPGA
 File Structore Wip
 ```
 ├── project_1
@@ -196,4 +196,5 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 - Noam Nisan and Shimon Schocken, creators of the Nand2Tetris course
 - The open-source FPGA and Verilog communities
+
 

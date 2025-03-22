@@ -1,0 +1,261 @@
+$date
+	Sun Mar 23 00:04:51 2025
+$end
+$version
+	Icarus Verilog
+$end
+$timescale
+	1ps
+$end
+$scope module alu_tb $end
+$var wire 1 ! zero_flag $end
+$var wire 8 " result [7:0] $end
+$var wire 1 # overflow_flag $end
+$var wire 1 $ carry_flag $end
+$var reg 8 % a [7:0] $end
+$var reg 8 & b [7:0] $end
+$var reg 4 ' op_code [3:0] $end
+$scope module dut $end
+$var wire 8 ( a [7:0] $end
+$var wire 8 ) b [7:0] $end
+$var wire 4 * op_code [3:0] $end
+$var parameter 4 + ADD $end
+$var parameter 4 , AND $end
+$var parameter 4 - CMPEQ $end
+$var parameter 4 . CMPLE $end
+$var parameter 4 / CMPLT $end
+$var parameter 4 0 MUL $end
+$var parameter 4 1 NOT $end
+$var parameter 4 2 OR $end
+$var parameter 4 3 SHL $end
+$var parameter 4 4 SHR $end
+$var parameter 4 5 SUB $end
+$var parameter 4 6 XOR $end
+$var reg 1 $ carry_flag $end
+$var reg 16 7 mul_temp [15:0] $end
+$var reg 1 # overflow_flag $end
+$var reg 8 8 result [7:0] $end
+$var reg 9 9 temp [8:0] $end
+$var reg 1 ! zero_flag $end
+$upscope $end
+$scope task display_result $end
+$var reg 1 : expected_carry $end
+$var reg 1 ; expected_overflow $end
+$var reg 8 < expected_result [7:0] $end
+$var reg 1 = expected_zero $end
+$upscope $end
+$upscope $end
+$enddefinitions $end
+$comment Show the parameter values. $end
+$dumpall
+b100 6
+b1 5
+b111 4
+b110 3
+b11 2
+b101 1
+b1011 0
+b1001 /
+b1010 .
+b1000 -
+b10 ,
+b0 +
+$end
+#0
+$dumpvars
+x=
+bx <
+x;
+x:
+b11110 9
+b11110 8
+bx 7
+b0 *
+b10100 )
+b1010 (
+b0 '
+b10100 &
+b1010 %
+0$
+0#
+b11110 "
+0!
+$end
+#10000
+0;
+0:
+0=
+b11110 <
+#11000
+1$
+b101100 "
+b101100 8
+b100101100 9
+b1100100 &
+b1100100 )
+b11001000 %
+b11001000 (
+#21000
+1:
+b101100 <
+#22000
+1#
+b11001000 "
+b11001000 8
+b11001000 9
+0$
+b1100100 %
+b1100100 (
+#32000
+0:
+b11001000 <
+#33000
+b10000000 "
+b10000000 8
+b10000000 9
+1#
+b1 &
+b1 )
+b1111111 %
+b1111111 (
+#43000
+1;
+b10000000 <
+#44000
+b11110 "
+b11110 8
+b11110 9
+0#
+b1 '
+b1 *
+b10100 &
+b10100 )
+b110010 %
+b110010 (
+#54000
+0;
+b11110 <
+#55000
+1$
+b11110110 "
+b11110110 8
+b111110110 9
+b1010 %
+b1010 (
+#65000
+1:
+b11110110 <
+#66000
+1#
+b1111111 "
+b1111111 8
+b1111111 9
+0$
+b1 &
+b1 )
+b10000000 %
+b10000000 (
+#76000
+1;
+b1111111 <
+#77000
+1!
+b0 "
+b0 8
+0#
+b10 '
+b10 *
+b1010101 &
+b1010101 )
+b10101010 %
+b10101010 (
+#87000
+0;
+0:
+1=
+b0 <
+#88000
+b11111111 "
+b11111111 8
+0!
+b11 '
+b11 *
+#98000
+0=
+b11111111 <
+#99000
+b100 '
+b100 *
+#110000
+b1010101 "
+b1010101 8
+b101 '
+b101 *
+b0 &
+b0 )
+#120000
+b1010101 <
+#121000
+b1000 "
+b1000 8
+b110 '
+b110 *
+b11 &
+b11 )
+b1 %
+b1 (
+#131000
+b1000 <
+#132000
+b10000 "
+b10000 8
+b111 '
+b111 *
+b10000000 %
+b10000000 (
+#142000
+b10000 <
+#143000
+b1 "
+b1 8
+b1000 '
+b1000 *
+b1010 &
+b1010 )
+b1010 %
+b1010 (
+#153000
+b1 <
+#154000
+b1001 '
+b1001 *
+b101 %
+b101 (
+#165000
+b1010 '
+b1010 *
+b1010 %
+b1010 (
+#176000
+b110010 "
+b110010 8
+b110010 7
+b1011 '
+b1011 *
+b101 &
+b101 )
+#186000
+b110010 <
+#187000
+1$
+b10010000 "
+b10010000 8
+b110010000 7
+b10100 &
+b10100 )
+b10100 %
+b10100 (
+#197000
+1:
+b10010000 <
+#198000
