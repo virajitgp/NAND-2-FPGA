@@ -19,6 +19,14 @@
 +incdir+/home/neo/NAND-2-FPGA/project_2/alu
 +incdir+/home/neo/NAND-2-FPGA/project_2/full_adder
 +incdir+/home/neo/NAND-2-FPGA/project_2/half_adder
++incdir+/home/neo/NAND-2-FPGA/project_3/bit
++incdir+/home/neo/NAND-2-FPGA/project_3/prog_counter
++incdir+/home/neo/NAND-2-FPGA/project_3/ram_16k
++incdir+/home/neo/NAND-2-FPGA/project_3/ram_4k
++incdir+/home/neo/NAND-2-FPGA/project_3/ram_512
++incdir+/home/neo/NAND-2-FPGA/project_3/ram_64
++incdir+/home/neo/NAND-2-FPGA/project_3/ram_8
++incdir+/home/neo/NAND-2-FPGA/project_3/register
 +incdir+/home/neo/NAND-2-FPGA/trying_verilog
 +incdir+/home/neo/NAND-2-FPGA/project_1/4-16mux
 +incdir+/home/neo/NAND-2-FPGA/project_1/4dmux
@@ -41,4 +49,12 @@
 +incdir+/home/neo/NAND-2-FPGA/project_2/alu
 +incdir+/home/neo/NAND-2-FPGA/project_2/full_adder
 +incdir+/home/neo/NAND-2-FPGA/project_2/half_adder
++incdir+/home/neo/NAND-2-FPGA/project_3/bit
++incdir+/home/neo/NAND-2-FPGA/project_3/prog_counter
++incdir+/home/neo/NAND-2-FPGA/project_3/ram_16k
++incdir+/home/neo/NAND-2-FPGA/project_3/ram_4k
++incdir+/home/neo/NAND-2-FPGA/project_3/ram_512
++incdir+/home/neo/NAND-2-FPGA/project_3/ram_64
++incdir+/home/neo/NAND-2-FPGA/project_3/ram_8
++incdir+/home/neo/NAND-2-FPGA/project_3/register
 +incdir+/home/neo/NAND-2-FPGA/trying_verilog
