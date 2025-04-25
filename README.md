@@ -25,11 +25,18 @@ Implementation of arithmetic units:
 - Full adder
 - 16-bit adder
 - 16-bit incrementer
+- Arithmetic Logic Unit
+
+### Project 3: Memory
+Implementation of Memory Unit's 
+- Bit 
+- Registers
+- RAM
+- Program Counter
 
 ### Future Projects
 
 _(Coming soon)_
-- Project 3: Memory elements (Registers, RAM)
 - Project 4: Machine language and assembly
 - Project 5: CPU architecture
 - project 6: Assembler
