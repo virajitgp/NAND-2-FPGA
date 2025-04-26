@@ -82,7 +82,7 @@ The project follows a bottom-up approach:
 2. **Basic Gates**: NOT, AND, OR, XOR built using NAND gates
 3. **Multiplexers/Demultiplexers**: For data selection and routing
 4. **Arithmetic Units**: Adding and incrementing numbers
-5. **Memory**: Registers and RAM modules _(upcoming)_
+5. **Memory**: Registers and RAM modules 
 6. **CPU**: The complete HACK CPU architecture _(upcoming)_
 7. **Computer**: The fully functional HACK computer system _(upcoming)_
 
