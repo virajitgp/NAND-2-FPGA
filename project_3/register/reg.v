@@ -5,10 +5,7 @@ module Register(
     input wire [15:0] in,    // 16-bit input
     output reg [15:0] out    // 16-bit output
 );
-    // Initialize output to 0
-    initial begin
-        out = 16'b0;
-    end
+   
 
     // Write operation
     always @(posedge clk) begin
