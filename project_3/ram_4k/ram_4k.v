@@ -18,7 +18,7 @@ module RAM4K(
     end
 
     // Read operation (update on address change)
-    always @(address) begin
+    always @(posedge) begin
         out = memory[address];
     end
 
