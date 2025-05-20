@@ -7,10 +7,6 @@ module PC(
     output reg [15:0] out   // Output value
 );
 
-    // Initialize the counter
-    initial begin
-        out = 16'b0;
-    end
 
     // Program counter logic
     always @(posedge clk) begin

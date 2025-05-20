@@ -8,12 +8,6 @@ module RAM512(
     // 512 registers, each 16-bit wide
     reg [15:0] memory [0:511];
     
-    // Initialize output to 0
-    initial begin
-        out = 16'b0;
-        // Full memory initialization would be too verbose
-        // Memory locations will be 0 by default
-    end
 
     // Write operation
     always @(posedge clk) begin
@@ -23,7 +17,7 @@ module RAM512(
     end
 
     // Read operation (update on address change)
-    always @(address) begin
+    always @(posedge) begin
         out = memory[address];
     end
 

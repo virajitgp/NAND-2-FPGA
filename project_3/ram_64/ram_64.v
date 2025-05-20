@@ -7,16 +7,6 @@ module RAM64(
 );
     // 64 registers, each 16-bit wide
     reg [15:0] memory [0:63];
-    
-    // Initialize memory to all zeros
-    integer i;
-    initial begin
-        for (i = 0; i < 64; i = i + 1) begin
-            memory[i] = 16'b0;
-        end
-        out = 16'b0;
-    end
-
     // Write operation
     always @(posedge clk) begin
         if (load) begin
@@ -25,7 +15,7 @@ module RAM64(
     end
 
     // Read operation (update on address change)
-    always @(address) begin
+    always @(posedge) begin
         out = memory[address];
     end
 

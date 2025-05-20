@@ -9,14 +9,6 @@ module RAM8(
     // 8 registers, each 16-bit wide
     reg [15:0] memory [0:7];
     
-    // Initialize memory to all zeros
-    integer i;
-    initial begin
-        for (i = 0; i < 8; i = i + 1) begin
-            memory[i] = 16'b0;
-        end
-        out = 16'b0;
-    end
 
     // Write operation
     always @(posedge clk) begin
@@ -26,7 +18,7 @@ module RAM8(
     end
 
     // Read operation (update on address change)
-    always @(address) begin
+    always @(posedge) begin
         out = memory[address];
     end
 
