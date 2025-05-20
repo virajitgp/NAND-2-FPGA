@@ -1,0 +1,23 @@
+// ALU Register Operations
+0000: ADD   Rd, Rs1, Rs2    // Rd = Rs1 + Rs2
+0001: SUB   Rd, Rs1, Rs2    // Rd = Rs1 - Rs2
+0010: AND   Rd, Rs1, Rs2    // Rd = Rs1 & Rs2
+0011: OR    Rd, Rs1, Rs2    // Rd = Rs1 | Rs2
+0100: XOR   Rd, Rs1, Rs2    // Rd = Rs1 ^ Rs2
+0101: NOT   Rd, Rs1         // Rd = ~Rs1 (Rs2 ignored)
+0110: SHL   Rd, Rs1, Rs2    // Rd = Rs1 << Rs2
+0111: SHR   Rd, Rs1, Rs2    // Rd = Rs1 >> Rs2
+1000: CMPEQ Rd, Rs1, Rs2    // Rd = (Rs1 == Rs2) ? 1 : 0
+1001: CMPLT Rd, Rs1, Rs2    // Rd = (Rs1 < Rs2) ? 1 : 0
+1010: CMPLE Rd, Rs1, Rs2    // Rd = (Rs1 <= Rs2) ? 1 : 0
+1011: MUL   Rd, Rs1, Rs2    // Rd = Rs1 * Rs2
+
+// Immediate Operations (uses I-Type format)
+1100: ADDI  Rd, Rs, Imm     // Rd = Rs + Imm
+1101: LOAD  Rd, Rs, Offset  // Rd = Memory[Rs + Offset]
+1110: STORE Rs, Rd, Offset  // Memory[Rd + Offset] = Rs
+
+// Jump/Branch Operations (uses J-Type format)
+1111: JUMP  Addr            // PC = Addr
+1111: BEQ   Rs1, Rs2, Addr  // If Rs1 == Rs2, PC = Addr
+1111: BNE   Rs1, Rs2, Addr  // If Rs1 != Rs2, PC = Addr
