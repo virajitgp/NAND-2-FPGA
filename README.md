@@ -89,7 +89,7 @@ The project follows a bottom-up approach:
 
 - [Nand2Tetris Official Website](https://www.nand2tetris.org/)
 - [The Elements of Computing Systems](https://mitpress.mit.edu/books/elements-computing-systems-second-edition) (The Nand2Tetris book)
-- [FPGA Development Guide](https://example.com/fpga-dev-guide)
+- Verilog By Example - Blaine C. Readler
 
 ## License 
 This project is licensed under the MIT License - see the LICENSE file for details.
