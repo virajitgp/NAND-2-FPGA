@@ -1,7 +1,7 @@
 
 
 
-![Nand2Tetris](https://www.nand2tetris.org/)
+[Nand2Tetris](https://www.nand2tetris.org/)
 
 ## Overview
 
@@ -96,7 +96,7 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ## Acknowledgments
 
-- ![MARVEL UVCE](https://hub.uvcemarvel.in/)
+- [MARVEL UVCE](https://hub.uvcemarvel.in/)
 - Noam Nisan and Shimon Schocken, creators of the Nand2Tetris course
 - The open-source FPGA and Verilog communities
 
