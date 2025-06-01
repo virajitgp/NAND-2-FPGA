@@ -96,7 +96,7 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ## Acknowledgments
 
-- MARVEL UVCE
+- ![MARVEL UVCE](https://hub.uvcemarvel.in/)
 - Noam Nisan and Shimon Schocken, creators of the Nand2Tetris course
 - The open-source FPGA and Verilog communities
 
