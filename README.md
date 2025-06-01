@@ -47,7 +47,6 @@ _(Coming soon)_
 
 - FPGA development board
 - Verilog HDL simulator (e.g., Icarus Verilog)
-- FPGA synthesis tools compatible with your board
 
 ### Installation
 
@@ -92,11 +91,12 @@ The project follows a bottom-up approach:
 - [The Elements of Computing Systems](https://mitpress.mit.edu/books/elements-computing-systems-second-edition) (The Nand2Tetris book)
 - [FPGA Development Guide](https://example.com/fpga-dev-guide)
 
-## Lisence
+## License 
 This project is licensed under the MIT License - see the LICENSE file for details.
 
 ## Acknowledgments
 
+- MARVEL UVCE
 - Noam Nisan and Shimon Schocken, creators of the Nand2Tetris course
 - The open-source FPGA and Verilog communities
 
