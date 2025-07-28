@@ -34,10 +34,14 @@ Implementation of Memory Unit's
 - RAM
 - Program Counter
 
+### Project 4: Assembly
+- Assmebly code for ADDING 2 numbers
+- Assembly code for Showing a block on the screen when a key is pressed
+
 ### Future Projects
 
 _(Coming soon)_
-- Project 4: Machine language and assembly
+
 - Project 5: CPU architecture
 - project 6: Assembler
 
