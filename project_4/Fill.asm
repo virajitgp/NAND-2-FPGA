@@ -18,7 +18,7 @@ BLACK:  .equ 0xFFFF
     ADDI R5, R0, SCREEN_SIZE      ; R5 = screen size (pixel count)
     ADDI R6, R0, 1                ; R6 = 1 (constant for comparison)
 
-main_loop:
+;main_loop:
     ; Check keyboard status
     LOAD R1, R3, 0                ; R1 = keyboard status
     AND  R1, R1, R6               ; Isolate bit 0 (key pressed status)
@@ -29,12 +29,12 @@ main_loop:
     BNE R7, R6, set_pixels        ; If not pressed, keep R2 = WHITE
     ADDI R2, R0, BLACK            ; If pressed, R2 = BLACK
 
-set_pixels:
+;set_pixels:
     ; Initialize counter and screen position
     ADDI R7, R0, 0                ; R7 = pixel counter (0 to SCREEN_SIZE-1)
     ADDI R1, R4, 0                ; R1 = current screen position
 
-fill_screen:
+;fill_screen:
     ; Fill current pixel with color in R2
     STORE R2, R1, 0               ; Store color at current position
     
