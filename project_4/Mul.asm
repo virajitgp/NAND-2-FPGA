@@ -1,50 +1,24 @@
-;===============================================
-; Computes R0 * R1 and stores result in R2
-;===============================================
+	;===============================================
+	; Computes R0 * R1 and stores result in R2
+	;===============================================
 
-; Note: This program assumes R0 and R1 already 
-; contain the values to be multiplied
+	; Program to calculate R2 = 3 * 2 (This will now work)
 
-multiply:
-    ; Direct multiplication using MUL instruction
-    MUL R2, R0, R1        ; R2 = R0 * R1
-    
-    ; Program is complete, halt or loop
-    JUMP end
+	LDI R0, 3; Load the value 3 into R0
+	LDI R1, 2; Load the counter 2 into R1
+	SUB R2, R2, R2; Clear R2 to 0 for the result
+	SUB R15, R15, R15; Clear R15 to 0, we'll use it for comparison
 
-;-----------------------------------------------
-; Alternative implementation without using MUL
-; (In case we want to implement multiplication manually)
-;-----------------------------------------------
+LOOP_CHECK:
+	;     Check if our counter R1 is zero. CMPEQ now sets Z flag correctly.
+	CMPEQ R15, R1, R15; Sets Z flag to 1 if R1 == 0
+	BZ    DONE; If Z flag is set, jump to DONE
 
-multiply_manual:
-    ; Initialize result
-    ADDI R2, R0, 0        ; R2 = 0 (accumulator)
-    ADDI R3, R0, 0        ; R3 = 0 (counter)
-    ADDI R4, R1, 0        ; R4 = R1 (preserve original value)
-    ADDI R5, R0, 0        ; R5 = 0 (constant zero)
-    
-    ; Check if either operand is zero
-    CMPEQ R6, R0, R5      ; R6 = (R0 == 0) ? 1 : 0
-    BEQ R6, R5, check_r1  ; If R0 != 0, continue to check R1
-    JUMP end              ; If R0 == 0, result is zero, goto end
-    
-check_r1:
-    CMPEQ R6, R4, R5      ; R6 = (R4 == 0) ? 1 : 0
-    BEQ R6, R5, mult_loop ; If R1 != 0, start multiplication
-    JUMP end              ; If R1 == 0, result is zero, goto end
+	;    If we are here, the counter is not zero, so we do the work
+	ADD  R2, R2, R0; Add the value to our result (R2 = R2 + 3)
+	ADDI R1, R1, 15; Decrement the counter (R1 = R1 - 1)
+	JMP  LOOP_CHECK; Go back to the check at the top of the loop
 
-mult_loop:
-    ; Check if we're done
-    CMPEQ R6, R3, R4      ; R6 = (R3 == R4) ? 1 : 0
-    BEQ R6, R5, mult_step ; If not done, continue
-    JUMP end              ; If done, goto end
-    
-mult_step:
-    ADD R2, R2, R0        ; R2 = R2 + R0
-    ADDI R3, R3, 1        ; R3 = R3 + 1
-    JUMP mult_loop        ; Repeat
-
-end:
-    ; End of program (infinite loop)
-    JUMP end
+DONE:
+	;   Halt the CPU by jumping to the same spot forever.
+	JMP DONE
