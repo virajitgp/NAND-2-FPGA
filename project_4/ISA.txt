@@ -1,23 +1,26 @@
-// ALU Register Operations
-0000: ADD   Rd, Rs1, Rs2    // Rd = Rs1 + Rs2
-0001: SUB   Rd, Rs1, Rs2    // Rd = Rs1 - Rs2
-0010: AND   Rd, Rs1, Rs2    // Rd = Rs1 & Rs2
-0011: OR    Rd, Rs1, Rs2    // Rd = Rs1 | Rs2
-0100: XOR   Rd, Rs1, Rs2    // Rd = Rs1 ^ Rs2
-0101: NOT   Rd, Rs1         // Rd = ~Rs1 (Rs2 ignored)
-0110: SHL   Rd, Rs1, Rs2    // Rd = Rs1 << Rs2
-0111: SHR   Rd, Rs1, Rs2    // Rd = Rs1 >> Rs2
-1000: CMPEQ Rd, Rs1, Rs2    // Rd = (Rs1 == Rs2) ? 1 : 0
-1001: CMPLT Rd, Rs1, Rs2    // Rd = (Rs1 < Rs2) ? 1 : 0
-1010: CMPLE Rd, Rs1, Rs2    // Rd = (Rs1 <= Rs2) ? 1 : 0
-1011: MUL   Rd, Rs1, Rs2    // Rd = Rs1 * Rs2
+Instruction Set:
+Arithmetic & Logical:
+    ADD Rd, Ra, Rb: Rd = Ra + Rb
+    SUB Rd, Ra, Rb: Rd = Ra - Rb
+    AND Rd, Ra, Rb: Rd = Ra & Rb
+    OR Rd, Ra, Rb: Rd = Ra | Rb
+    XOR Rd, Ra, Rb: Rd = Ra ^ Rb
+    NOT Rd, Ra: Rd = ~Ra
+    SHL Rd, Ra, Rb: Rd = Ra << Rb[3:0] (Shift Left)
+    SHR Rd, Ra, Rb: Rd = Ra >> Rb[3:0] (Shift Right)
 
-// Immediate Operations (uses I-Type format)
-1100: ADDI  Rd, Rs, Imm     // Rd = Rs + Imm
-1101: LOAD  Rd, Rs, Offset  // Rd = Memory[Rs + Offset]
-1110: STORE Rs, Rd, Offset  // Memory[Rd + Offset] = Rs
+Immediate Operations
+    LDI Rd, imm: Rd = imm (Load 4-bit Immediate value)
+    ADDI Rd, Ra, imm: Rd = Ra + imm (Add 4-bit Immediate value)
 
-// Jump/Branch Operations (uses J-Type format)
-1111: JUMP  Addr            // PC = Addr
-1111: BEQ   Rs1, Rs2, Addr  // If Rs1 == Rs2, PC = Addr
-1111: BNE   Rs1, Rs2, Addr  // If Rs1 != Rs2, PC = Addr
+Memory Operations:
+    LOAD Rd, Ra, offset: Rd = Memory[Ra + offset] (Load from memory)
+STORE Rd, Ra, offset: Memory[Ra + offset] = Rd (Store to memory)
+
+Compare Operations:
+    CMPEQ Rd, Ra, Rb: Rd = (Ra == Rb) ? 1 : 0 (Compare Equal, sets Z flag based on comparison)
+    CMPLT Rd, Ra, Rb: Rd = (signed(Ra) < signed(Rb)) ? 1 : 0 (Compare Less Than)
+
+Control Flow:
+    JMP address: PC = address (Unconditional Jump)
+    BZ address: if (Zero_Flag == 1) PC = address (Branch if Zero)
