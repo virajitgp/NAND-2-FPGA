@@ -1,48 +1,43 @@
-;===============================================
-; Continuously fills screen with black if key 
-; is pressed, or white otherwise
-;===============================================
+; Program to fill the screen, one pixel per keypress.
 
-; Memory-mapped I/O addresses
-KEYBOARD_STATUS: .equ 0xF000   ; Keyboard status register
-SCREEN_START:    .equ 0xE000   ; Start of screen memory
-SCREEN_SIZE:     .equ 4096     ; 64x64 pixels (4096 words)
+; --- Initialization ---
+; R14 will be a temp register for shift values
+LDI R14, 12
+LDI R0, 8
+SHL R0, R0, R14 ; R0 = 0x8000 (Video RAM start)
 
-; Define constants
-WHITE:  .equ 0x0000
-BLACK:  .equ 0xFFFF
+LDI R1, 12
+SHL R1, R1, R14 ; R1 = 0xC000 (Keyboard buffer)
 
-    ; Initialize registers
-    ADDI R3, R0, KEYBOARD_STATUS  ; R3 = address of keyboard status
-    ADDI R4, R0, SCREEN_START     ; R4 = start address of screen memory
-    ADDI R5, R0, SCREEN_SIZE      ; R5 = screen size (pixel count)
-    ADDI R6, R0, 1                ; R6 = 1 (constant for comparison)
+LDI R14, 4
+LDI R2, 15
+SHL R2, R2, R14
+ADDI R2, R2, 15 ; R2 = 255 (White color)
 
-;main_loop:
-    ; Check keyboard status
-    LOAD R1, R3, 0                ; R1 = keyboard status
-    AND  R1, R1, R6               ; Isolate bit 0 (key pressed status)
+; R15 will be our permanent 'zero' register for comparisons
+SUB R15, R15, R15
+
+; --- Main Loop ---
+WAIT_FOR_KEY:
+    ; Load the keyboard buffer into R3.
+    LOAD R3, R1, 0
     
-    ; Set color based on keyboard status
-    ADDI R2, R0, WHITE            ; Default color = WHITE
-    CMPEQ R7, R1, R6              ; Check if key is pressed (R1 == 1)
-    BNE R7, R6, set_pixels        ; If not pressed, keep R2 = WHITE
-    ADDI R2, R0, BLACK            ; If pressed, R2 = BLACK
-
-;set_pixels:
-    ; Initialize counter and screen position
-    ADDI R7, R0, 0                ; R7 = pixel counter (0 to SCREEN_SIZE-1)
-    ADDI R1, R4, 0                ; R1 = current screen position
-
-;fill_screen:
-    ; Fill current pixel with color in R2
-    STORE R2, R1, 0               ; Store color at current position
+    ; Compare R3 to our zero register (R15).
+    ; The result (1 or 0) is stored in R4, which we ignore.
+    ; The important part is that this sets the Z flag correctly
+    ; without changing R15.
+    CMPEQ R4, R3, R15
     
-    ; Move to next pixel
-    ADDI R1, R1, 1                ; Advance to next pixel address
-    ADDI R7, R7, 1                ; Increment counter
+    ; If Z flag is 1 (meaning R3 was 0), no key was pressed, so loop.
+    BZ WAIT_FOR_KEY
+
+; --- Key was pressed, so draw the pixel ---
+DRAW_PIXEL:
+    ; Write the color in R2 to the screen address in R0
+    STORE R2, R0, 0
     
-    ; Check if we've filled the entire screen
-    CMPLT R3, R7, R5              ; R3 = (R7 < R5) ? 1 : 0
-    BEQ R3, R0, main_loop         ; If R3 == 0 (done), go back to main loop
-    JUMP fill_screen              ; Otherwise, continue filling
+    ; Move to the next pixel on the screen
+    ADDI R0, R0, 1
+    
+    ; Go back and wait for the next keypress
+    JMP WAIT_FOR_KEY
