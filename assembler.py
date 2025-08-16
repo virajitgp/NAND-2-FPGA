@@ -1,6 +1,7 @@
 import tkinter as tk
-from tkinter import ttk, scrolledtext, messagebox
+from tkinter import ttk, scrolledtext, messagebox, filedialog
 import re
+import struct
 
 
 class CPU:
@@ -168,16 +169,10 @@ class CPU:
                     if self.screen_update_callback:
                         self.screen_update_callback(addr, self.registers[rd])
 
-            # --- Compare Operations ---
             elif opcode == 0xC:  # CMPEQ
-                # --- BUG FIX STARTS HERE ---
-                # The result of the comparison (0 or 1) is stored in Rd.
                 res_16 = 1 if val_a == val_b else 0
                 self.registers[rd] = res_16
-                # The Z flag is now set based on the LOGICAL comparison,
-                # not on the 0 or 1 result.
                 self.flags["Z"] = 1 if val_a == val_b else 0
-                # --- BUG FIX ENDS HERE ---
 
             elif opcode == 0xD:  # CMPLT
                 s_val_a = val_a if val_a < 32768 else val_a - 65536
@@ -343,31 +338,54 @@ class SimulatorGUI(tk.Tk):
             "Treeview.Heading", background="#4A4A4A", font=("Consolas", 10, "bold")
         )
         self.style.map("Treeview.Heading", background=[("active", "#5A5A5A")])
+        self.style.configure(
+            "TNotebook.Tab", padding=[12, 5], font=("Segoe UI", 10, "bold")
+        )
+        self.style.map(
+            "TNotebook.Tab",
+            background=[("selected", "#5A5A5A")],
+            foreground=[("selected", "white")],
+        )
 
         self.cpu = CPU(self.update_pixel)
         self.assembler = Assembler()
         self.running = False
         self.run_speed = 50
 
-        self.main_pane = ttk.PanedWindow(self, orient=tk.HORIZONTAL)
-        self.main_pane.pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
+        # --- Main Layout with Tabs ---
+        self.notebook = ttk.Notebook(self)
+        self.notebook.pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
 
-        self.left_frame = ttk.Frame(self.main_pane, padding=5)
-        self.right_frame = ttk.Frame(self.main_pane, padding=5)
-        self.main_pane.add(self.left_frame, weight=1)
-        self.main_pane.add(self.right_frame, weight=1)
+        self.simulator_tab = ttk.Frame(self.notebook, padding=5)
+        self.isa_tab = ttk.Frame(self.notebook, padding=5)
 
-        self.setup_left_panel()
-        self.setup_right_panel()
+        self.notebook.add(self.simulator_tab, text="Simulator")
+        self.notebook.add(self.isa_tab, text="ISA Reference")
+
+        self.setup_simulator_tab()
+        self.setup_isa_tab()
 
         self.reset_all()
 
-    def setup_left_panel(self):
-        """Sets up the code editor and control buttons."""
-        self.left_frame.rowconfigure(1, weight=1)
-        self.left_frame.columnconfigure(0, weight=1)
+    def setup_simulator_tab(self):
+        """Sets up the main simulator interface inside a tab."""
+        main_pane = ttk.PanedWindow(self.simulator_tab, orient=tk.HORIZONTAL)
+        main_pane.pack(fill=tk.BOTH, expand=True)
 
-        controls_frame = ttk.Frame(self.left_frame)
+        left_frame = ttk.Frame(main_pane, padding=5)
+        right_frame = ttk.Frame(main_pane, padding=5)
+        main_pane.add(left_frame, weight=1)
+        main_pane.add(right_frame, weight=1)
+
+        self.setup_left_panel(left_frame)
+        self.setup_right_panel(right_frame)
+
+    def setup_left_panel(self, parent_frame):
+        """Sets up the code editor and control buttons."""
+        parent_frame.rowconfigure(1, weight=1)
+        parent_frame.columnconfigure(0, weight=1)
+
+        controls_frame = ttk.Frame(parent_frame)
         controls_frame.grid(row=0, column=0, sticky="ew", pady=(0, 10))
 
         ttk.Button(controls_frame, text="Assemble", command=self.assemble_code).pack(
@@ -385,9 +403,15 @@ class SimulatorGUI(tk.Tk):
         ttk.Button(controls_frame, text="Reset", command=self.reset_all).pack(
             side=tk.LEFT, padx=5
         )
+        ttk.Button(controls_frame, text="Export HEX", command=self.export_hex).pack(
+            side=tk.LEFT, padx=5
+        )
+        ttk.Button(controls_frame, text="Export BIN", command=self.export_bin).pack(
+            side=tk.LEFT, padx=5
+        )
 
         self.code_editor = scrolledtext.ScrolledText(
-            self.left_frame,
+            parent_frame,
             wrap=tk.WORD,
             undo=True,
             font=("Consolas", 12),
@@ -398,18 +422,18 @@ class SimulatorGUI(tk.Tk):
         )
         self.code_editor.grid(row=1, column=0, sticky="nsew")
 
-    def setup_right_panel(self):
+    def setup_right_panel(self, parent_frame):
         """Sets up the registers, flags, memory, and screen displays."""
-        self.right_pane = ttk.PanedWindow(self.right_frame, orient=tk.VERTICAL)
-        self.right_pane.pack(fill=tk.BOTH, expand=True)
+        right_pane = ttk.PanedWindow(parent_frame, orient=tk.VERTICAL)
+        right_pane.pack(fill=tk.BOTH, expand=True)
 
-        top_right_frame = ttk.Frame(self.right_pane)
-        memory_frame = ttk.Frame(self.right_pane)
-        screen_frame = ttk.Frame(self.right_pane, padding=5)
+        top_right_frame = ttk.Frame(right_pane)
+        memory_frame = ttk.Frame(right_pane)
+        screen_frame = ttk.Frame(right_pane, padding=5)
 
-        self.right_pane.add(top_right_frame, weight=1)
-        self.right_pane.add(memory_frame, weight=2)
-        self.right_pane.add(screen_frame, weight=2)
+        right_pane.add(top_right_frame, weight=1)
+        right_pane.add(memory_frame, weight=2)
+        right_pane.add(screen_frame, weight=2)
 
         self.reg_labels = {}
         reg_frame = ttk.LabelFrame(top_right_frame, text="Registers")
@@ -477,6 +501,65 @@ class SimulatorGUI(tk.Tk):
                 )
                 self.screen_pixels[addr] = px_id
 
+    def setup_isa_tab(self):
+        """Sets up the ISA reference tab."""
+        isa_text_widget = scrolledtext.ScrolledText(
+            self.isa_tab,
+            wrap=tk.WORD,
+            font=("Consolas", 11),
+            bg="#1E1E1E",
+            fg="#D4D4D4",
+        )
+        isa_text_widget.pack(fill=tk.BOTH, expand=True, padx=5, pady=5)
+
+        isa_doc = """
+### CPU Core ###
+- Architecture: 16-bit RISC
+- Word Size: 16 bits
+- Address Space: 16 bits (65,536 locations)
+- Registers: 16 general-purpose 16-bit registers (R0 through R15)
+
+--------------------------------------------------
+
+### Memory Map ###
+- 0x0000 - 0x7FFF: RAM (32K words)
+- 0x8000 - 0xBFFF: Video RAM (16K words, for a 128x128 screen)
+- 0xC000: Keyboard Buffer (Read-only)
+- 0xC001 - 0xFFFF: Reserved
+
+--------------------------------------------------
+
+### Instruction Set ###
+
+#### Arithmetic & Logical ####
+- ADD Rd, Ra, Rb:   Rd = Ra + Rb
+- SUB Rd, Ra, Rb:   Rd = Ra - Rb
+- AND Rd, Ra, Rb:   Rd = Ra & Rb
+- OR Rd, Ra, Rb:    Rd = Ra | Rb
+- XOR Rd, Ra, Rb:   Rd = Ra ^ Rb
+- NOT Rd, Ra:       Rd = ~Ra
+- SHL Rd, Ra, Rb:   Rd = Ra << Rb[3:0] (Shift Left)
+- SHR Rd, Ra, Rb:   Rd = Ra >> Rb[3:0] (Shift Right)
+
+#### Immediate Operations ####
+- LDI Rd, imm:      Rd = imm (Load 4-bit Immediate)
+- ADDI Rd, Ra, imm: Rd = Ra + imm (Add 4-bit Immediate)
+
+#### Memory Operations ####
+- LOAD Rd, Ra, offset: Rd = Memory[Ra + offset]
+- STORE Rd, Ra, offset: Memory[Ra + offset] = Rd
+
+#### Compare Operations ####
+- CMPEQ Rd, Ra, Rb: Rd = (Ra == Rb) ? 1 : 0
+- CMPLT Rd, Ra, Rb: Rd = (signed(Ra) < signed(Rb)) ? 1 : 0
+
+#### Control Flow ####
+- JMP address:      PC = address (Unconditional Jump)
+- BZ address:       if (Zero_Flag == 1) PC = address
+"""
+        isa_text_widget.insert(tk.END, isa_doc)
+        isa_text_widget.config(state=tk.DISABLED)  # Make it read-only
+
     def assemble_code(self):
         self.stop_program()
         try:
@@ -489,6 +572,55 @@ class SimulatorGUI(tk.Tk):
             )
         except Exception as e:
             messagebox.showerror("Assembler Error", str(e))
+
+    def export_hex(self):
+        """Assembles the code and saves it to a Verilog-compatible .hex file."""
+        try:
+            code = self.code_editor.get("1.0", tk.END)
+            machine_code = self.assembler.assemble(code)
+
+            filepath = filedialog.asksaveasfilename(
+                defaultextension=".hex",
+                filetypes=[("Hex Files", "*.hex"), ("All Files", "*.*")],
+            )
+            if not filepath:
+                return
+
+            with open(filepath, "w") as f:
+                for instruction in machine_code:
+                    f.write(f"{instruction:04X}\n")
+
+            messagebox.showinfo(
+                "Export Success",
+                f"Successfully exported {len(machine_code)} instructions to {filepath}",
+            )
+        except Exception as e:
+            messagebox.showerror("Export Error", f"Could not export file: {e}")
+
+    def export_bin(self):
+        """Assembles the code and saves it to a raw binary .bin file."""
+        try:
+            code = self.code_editor.get("1.0", tk.END)
+            machine_code = self.assembler.assemble(code)
+
+            filepath = filedialog.asksaveasfilename(
+                defaultextension=".bin",
+                filetypes=[("Binary Files", "*.bin"), ("All Files", "*.*")],
+            )
+            if not filepath:
+                return
+
+            with open(filepath, "wb") as f:
+                for instruction in machine_code:
+                    # Pack as big-endian unsigned short (16 bits)
+                    f.write(struct.pack(">H", instruction))
+
+            messagebox.showinfo(
+                "Export Success",
+                f"Successfully exported {len(machine_code)} instructions to {filepath}",
+            )
+        except Exception as e:
+            messagebox.showerror("Export Error", f"Could not export file: {e}")
 
     def run_program(self):
         if self.running:
@@ -547,10 +679,13 @@ class SimulatorGUI(tk.Tk):
         self.memory_view.tag_configure("current_pc", background="#4A6A8A")
 
         if self.cpu.pc < 256 and self.memory_view.get_children():
-            pc_item = self.memory_view.get_children()[self.cpu.pc]
-            if pc_item:
-                self.memory_view.selection_set(pc_item)
-                self.memory_view.see(pc_item)
+            try:
+                pc_item = self.memory_view.get_children()[self.cpu.pc]
+                if pc_item:
+                    self.memory_view.selection_set(pc_item)
+                    self.memory_view.see(pc_item)
+            except IndexError:
+                pass
 
     def update_pixel(self, address, color_val):
         """Callback to update a single pixel on the canvas."""
