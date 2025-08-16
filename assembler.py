@@ -1,12 +1,12 @@
-import tkinter as tk
-from tkinter import ttk, scrolledtext, messagebox, filedialog
 import re
 import struct
+import tkinter as tk
+from tkinter import filedialog, messagebox, scrolledtext, ttk
 
 
 class CPU:
     """
-    Simulates the 16-bit CPU, including registers, memory, and flags.
+    Simulates the 17-bit CPU, including registers, memory, and flags.
     Executes machine code based on the defined ISA.
     """
 
@@ -16,7 +16,7 @@ class CPU:
 
     def reset(self):
         """Resets all CPU components to their initial state."""
-        self.registers = [0] * 16
+        self.registers = [1] * 16
         self.memory = [0] * 65536
         self.pc = 0  # Program Counter
         self.flags = {"Z": 0, "C": 0, "O": 0}
@@ -33,7 +33,8 @@ class CPU:
 
     def set_key_press(self, key_code):
         """Simulates a key press by writing to the keyboard buffer."""
-        self.memory[self.KEYBOARD_BUFFER] = key_code
+        if self.memory[self.KEYBOARD_BUFFER] == 0:
+            self.memory[self.KEYBOARD_BUFFER] = key_code
 
     def step(self):
         """Fetches, decodes, and executes a single instruction."""
@@ -45,8 +46,6 @@ class CPU:
             return
         self.pc += 1
         self.decode_and_execute(instruction)
-        if self.memory[self.KEYBOARD_BUFFER] != 0:
-            pass
 
     def fetch(self):
         """Fetches the instruction at the current PC."""
@@ -161,6 +160,8 @@ class CPU:
             elif opcode == 0xA:  # LOAD
                 addr = (self.registers[ra] + imm) & 0xFFFF
                 self.registers[rd] = self.memory[addr]
+                if addr == self.KEYBOARD_BUFFER:
+                    self.memory[self.KEYBOARD_BUFFER] = 0
 
             elif opcode == 0xB:  # STORE
                 addr = (self.registers[ra] + imm) & 0xFFFF
@@ -227,16 +228,12 @@ class Assembler:
     def assemble(self, code):
         """Assembles the provided code string."""
         self.symbol_table = {}
-        lines = [
-            line.strip()
-            for line in code.split("\n")
-            if line.strip() and not line.strip().startswith(";")
-        ]
 
+        # --- First Pass with Line Numbers ---
         address = 0
-        cleaned_lines = []
-        for line in lines:
-            line = re.sub(r";.*$", "", line).strip()
+        cleaned_lines_with_numbers = []
+        for line_num, original_line in enumerate(code.split("\n"), 1):
+            line = re.sub(r";.*$", "", original_line).strip()
             if not line:
                 continue
 
@@ -244,54 +241,62 @@ class Assembler:
             if match:
                 self.symbol_table[match.group(1).upper()] = address
             else:
-                cleaned_lines.append(line)
+                cleaned_lines_with_numbers.append((line, line_num))
                 address += 1
 
+        # --- Second Pass with Error Handling ---
         machine_code = []
-        for line in cleaned_lines:
-            parts = re.split(r"[,\s]+", line, maxsplit=1)
-            mnemonic = parts[0].upper()
-            operands_str = parts[1] if len(parts) > 1 else ""
-            operands = (
-                [op.strip().upper() for op in operands_str.split(",")]
-                if operands_str
-                else []
-            )
+        for line, line_num in cleaned_lines_with_numbers:
+            try:
+                parts = re.split(r"[,\s]+", line, maxsplit=1)
+                mnemonic = parts[0].upper()
+                operands_str = parts[1] if len(parts) > 1 else ""
+                operands = (
+                    [op.strip().upper() for op in operands_str.split(",")]
+                    if operands_str
+                    else []
+                )
 
-            if mnemonic not in self.opcodes:
-                raise ValueError(f"Unknown instruction: {mnemonic}")
+                if mnemonic not in self.opcodes:
+                    raise ValueError(f"Unknown instruction: '{mnemonic}'")
 
-            opcode, op_type = self.opcodes[mnemonic]
-            instruction = opcode << 12
+                opcode, op_type = self.opcodes[mnemonic]
+                instruction = opcode << 12
 
-            if op_type == "R":
-                rd = int(operands[0][1:])
-                ra = int(operands[1][1:])
-                rb = 0
-                if len(operands) > 2:
-                    rb = int(operands[2][1:])
-                instruction |= (rd << 8) | (ra << 4) | rb
-
-            elif op_type == "I":
-                rd = int(operands[0][1:])
-                ra = 0
-                imm = 0
-                if "LDI" in mnemonic:
-                    imm = self.parse_immediate(operands[1])
-                else:
+                if op_type == "R":
+                    rd = int(operands[0][1:])
                     ra = int(operands[1][1:])
-                    imm = self.parse_immediate(operands[2])
-                instruction |= (rd << 8) | (ra << 4) | (imm & 0xF)
+                    rb = 0
+                    if len(operands) > 2:
+                        rb = int(operands[2][1:])
+                    instruction |= (rd << 8) | (ra << 4) | rb
 
-            elif op_type == "J":
-                label = operands[0]
-                if label in self.symbol_table:
-                    addr = self.symbol_table[label]
-                else:
-                    addr = self.parse_immediate(label)
-                instruction |= addr & 0xFFF
+                elif op_type == "I":
+                    rd = int(operands[0][1:])
+                    ra = 0
+                    imm = 0
+                    if "LDI" in mnemonic:
+                        imm = self.parse_immediate(operands[1])
+                    else:
+                        ra = int(operands[1][1:])
+                        imm = self.parse_immediate(operands[2])
+                    instruction |= (rd << 8) | (ra << 4) | (imm & 0xF)
 
-            machine_code.append(instruction)
+                elif op_type == "J":
+                    label = operands[0]
+                    if label in self.symbol_table:
+                        addr = self.symbol_table[label]
+                    else:
+                        try:
+                            addr = self.parse_immediate(label)
+                        except ValueError:
+                            raise ValueError(f"Undefined label: '{label}'")
+                    instruction |= addr & 0xFFF
+
+                machine_code.append(instruction)
+            except Exception as e:
+                # Re-raise the error with the line number for context
+                raise ValueError(f"Error on line {line_num}: {e}")
         return machine_code
 
     def parse_immediate(self, val_str):
@@ -352,7 +357,6 @@ class SimulatorGUI(tk.Tk):
         self.running = False
         self.run_speed = 50
 
-        # --- Main Layout with Tabs ---
         self.notebook = ttk.Notebook(self)
         self.notebook.pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
 
@@ -366,6 +370,13 @@ class SimulatorGUI(tk.Tk):
         self.setup_isa_tab()
 
         self.reset_all()
+
+        self.bind("<KeyPress>", self.handle_keypress)
+
+    def handle_keypress(self, event):
+        """Handles a key press event and sends the keycode to the CPU."""
+        if event.keycode:
+            self.cpu.set_key_press(event.keycode)
 
     def setup_simulator_tab(self):
         """Sets up the main simulator interface inside a tab."""
@@ -558,7 +569,7 @@ class SimulatorGUI(tk.Tk):
 - BZ address:       if (Zero_Flag == 1) PC = address
 """
         isa_text_widget.insert(tk.END, isa_doc)
-        isa_text_widget.config(state=tk.DISABLED)  # Make it read-only
+        isa_text_widget.config(state=tk.DISABLED)
 
     def assemble_code(self):
         self.stop_program()
@@ -612,7 +623,6 @@ class SimulatorGUI(tk.Tk):
 
             with open(filepath, "wb") as f:
                 for instruction in machine_code:
-                    # Pack as big-endian unsigned short (16 bits)
                     f.write(struct.pack(">H", instruction))
 
             messagebox.showinfo(
@@ -651,8 +661,9 @@ class SimulatorGUI(tk.Tk):
         """Resets the entire simulation, including CPU and GUI."""
         self.stop_program()
         self.cpu.reset()
-        for addr in self.screen_pixels.keys():
-            self.update_pixel(addr, 0)
+        if hasattr(self, "screen_pixels"):
+            for addr in self.screen_pixels.keys():
+                self.update_pixel(addr, 0)
         self.update_all_displays()
 
     def update_all_displays(self):
