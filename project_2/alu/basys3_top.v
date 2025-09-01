@@ -6,26 +6,32 @@ module basys3_top(
     input         btnl,
     input         btnd,
     input         btnr,
-    output [15:0] led       // 16 LEDs
+    output [7:0]  led,      // 8 LEDs for ALU result
+    output        flag_zero_led,
+    output        flag_carry_led,
+    output        flag_overflow_led
 );
 
-    // Use buttons for the opcode
     wire [3:0] op_code = {btnu, btnl, btnd, btnr};
+    wire [15:0] alu_result;
+    wire zero_flag, carry_flag, overflow_flag;
 
-    // Instantiate your ALU
     alu my_alu (
         .clk(clk),
-        .reset(btnc), // Use center button for reset
-        .enable(1'b1), // Keep it always enabled for this simple test
-        .a({sw[15:8], 8'b0}), // Use top 8 switches for 'a', pad with zeros
-        .b({8'b0, sw[7:0]}),   // Use bottom 8 switches for 'b'
+        .reset(btnc),
+        .enable(1'b1),
+        .a({sw[15:8], 8'b0}),
+        .b({8'b0, sw[7:0]}),
         .op_code(op_code),
-        .result(led), // Connect result directly to the LEDs
-        
-        // We aren't displaying the flags on LEDs in this example
-        .zero_flag(),
-        .carry_flag(),
-        .overflow_flag()
+        .result(alu_result),
+        .zero_flag(zero_flag),
+        .carry_flag(carry_flag),
+        .overflow_flag(overflow_flag)
     );
+
+    assign led = alu_result[7:0];       // Use lower 8 bits for LED output
+    assign flag_zero_led = zero_flag;   // Single LED for zero flag
+    assign flag_carry_led = carry_flag; // Single LED for carry flag
+    assign flag_overflow_led = overflow_flag; // Single LED for overflow flag
 
 endmodule
