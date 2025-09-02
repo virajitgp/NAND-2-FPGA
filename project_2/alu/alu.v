@@ -26,58 +26,54 @@ module alu (
   parameter MUL   = 4'b1011;
   
   // Internal registers and wires
-  reg [16:0] temp;
+  reg [15:0] next_result;
+  reg        next_zero_flag;
+  reg        next_carry_flag;
+  reg        next_overflow_flag;
+  reg [16:0] temp_add;
+  reg [16:0] temp_sub;
   reg [31:0] mul_temp;
-  wire [15:0] next_result;
-  wire next_zero_flag;
-  wire next_carry_flag;
-  wire next_overflow_flag;
-  
+
   // Combinational logic for next state calculation
   always @* begin
     // Default values
-    temp = 17'h00000;
-    mul_temp = 32'h00000000;
+    next_result = 16'h0000;
+    next_carry_flag = 1'b0;
+    next_overflow_flag = 1'b0;
     
     case (op_code)
       ADD: begin
-        temp = {1'b0, a} + {1'b0, b};
+        temp_add = {1'b0, a} + {1'b0, b};
+        next_result = temp_add[15:0];
+        next_carry_flag = temp_add[16];
+        next_overflow_flag = (a[15] == b[15]) && (next_result[15] != a[15]);
       end
       SUB: begin
-        temp = {1'b0, a} - {1'b0, b};
+        temp_sub = {1'b0, a} - {1'b0, b};
+        next_result = temp_sub[15:0];
+        next_carry_flag = (a < b); // Borrow
+        next_overflow_flag = (a[15] != b[15]) && (next_result[15] != a[15]);
       end
       MUL: begin
         mul_temp = a * b;
-        temp[15:0] = mul_temp[15:0];
-        temp[16] = |mul_temp[31:16]; // Set carry if upper bits non-zero
+        next_result = mul_temp[15:0];
+        next_carry_flag = |mul_temp[31:16];
+        next_overflow_flag = |mul_temp[31:16];
       end
-      AND:  temp = {1'b0, a & b};
-      OR:   temp = {1'b0, a | b};
-      XOR:  temp = {1'b0, a ^ b};
-      NOT:  temp = {1'b0, ~a};
-      SHL:  temp = {1'b0, a << b[3:0]};
-      SHR:  temp = {1'b0, a >> b[3:0]};
-      CMPEQ: temp = {16'h0000, (a == b)};
-      CMPLT: temp = {16'h0000, ($signed(a) < $signed(b))};
-      CMPLE: temp = {16'h0000, ($signed(a) <= $signed(b))};
-      default: temp = 17'h00000;
+      AND:  next_result = a & b;
+      OR:   next_result = a | b;
+      XOR:  next_result = a ^ b;
+      NOT:  next_result = ~a;
+      SHL:  next_result = a << b[3:0];
+      SHR:  next_result = a >> b[3:0];
+      CMPEQ: next_result = {15'h0, (a == b)};
+      CMPLT: next_result = {15'h0, ($signed(a) < $signed(b))};
+      CMPLE: next_result = {15'h0, ($signed(a) <= $signed(b))};
+      default: next_result = 16'h0000;
     endcase
+    
+    next_zero_flag = (next_result == 16'h0000);
   end
-  
-  // Assign next state values
-  assign next_result = (op_code == MUL) ? mul_temp[15:0] : temp[15:0];
-  assign next_zero_flag = (next_result == 16'h0000);
-  
-  // Carry flag calculation
-  assign next_carry_flag = (op_code == SUB) ? (a < b) : 
-                          (op_code == MUL) ? |mul_temp[31:16] : 
-                          temp[16];
-  
-  // Overflow flag calculation
-  assign next_overflow_flag = (op_code == ADD) ? ((a[15] == b[15]) && (temp[15] != a[15])) :
-                             (op_code == SUB) ? ((a[15] != b[15]) && (temp[15] != a[15])) :
-                             (op_code == MUL) ? |mul_temp[31:16] :
-                             1'b0;
   
   // Main synchronous logic block
   always @(posedge clk) begin
@@ -95,3 +91,15 @@ module alu (
   end
 
 endmodule
+
+
+
+
+
+
+
+
+
+
+
+
