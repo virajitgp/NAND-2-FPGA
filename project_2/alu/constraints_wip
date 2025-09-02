@@ -1,83 +1,35 @@
-## Basys3 Board Constraints for ALU Project
-## Target Device: XC7A35T-1CPG236C
-
-## Clock signal (100 MHz)
-set_property PACKAGE_PIN W5 [get_ports clk]
-set_property IOSTANDARD LVCMOS33 [get_ports clk]
-create_clock -add -name sys_clk_pin -period 10.00 -waveform {0 5} [get_ports clk]
-
-## Switches (SW0-SW15)
-set_property PACKAGE_PIN V17 [get_ports {sw[0]}]
-set_property IOSTANDARD LVCMOS33 [get_ports {sw[0]}]
-set_property PACKAGE_PIN V16 [get_ports {sw[1]}]
-set_property IOSTANDARD LVCMOS33 [get_ports {sw[1]}]
-set_property PACKAGE_PIN W16 [get_ports {sw[2]}]
-set_property IOSTANDARD LVCMOS33 [get_ports {sw[2]}]
-set_property PACKAGE_PIN W17 [get_ports {sw[3]}]
-set_property IOSTANDARD LVCMOS33 [get_ports {sw[3]}]
-set_property PACKAGE_PIN W15 [get_ports {sw[4]}]
-set_property IOSTANDARD LVCMOS33 [get_ports {sw[4]}]
-set_property PACKAGE_PIN V15 [get_ports {sw[5]}]
-set_property IOSTANDARD LVCMOS33 [get_ports {sw[5]}]
-set_property PACKAGE_PIN W14 [get_ports {sw[6]}]
-set_property IOSTANDARD LVCMOS33 [get_ports {sw[6]}]
-set_property PACKAGE_PIN W13 [get_ports {sw[7]}]
-set_property IOSTANDARD LVCMOS33 [get_ports {sw[7]}]
-set_property PACKAGE_PIN V2 [get_ports {sw[8]}]
-set_property IOSTANDARD LVCMOS33 [get_ports {sw[8]}]
-set_property PACKAGE_PIN T3 [get_ports {sw[9]}]
-set_property IOSTANDARD LVCMOS33 [get_ports {sw[9]}]
-set_property PACKAGE_PIN T2 [get_ports {sw[10]}]
-set_property IOSTANDARD LVCMOS33 [get_ports {sw[10]}]
-set_property PACKAGE_PIN R3 [get_ports {sw[11]}]
-set_property IOSTANDARD LVCMOS33 [get_ports {sw[11]}]
-set_property PACKAGE_PIN W2 [get_ports {sw[12]}]
-set_property IOSTANDARD LVCMOS33 [get_ports {sw[12]}]
-set_property PACKAGE_PIN U1 [get_ports {sw[13]}]
-set_property IOSTANDARD LVCMOS33 [get_ports {sw[13]}]
-set_property PACKAGE_PIN T1 [get_ports {sw[14]}]
-set_property IOSTANDARD LVCMOS33 [get_ports {sw[14]}]
-set_property PACKAGE_PIN R2 [get_ports {sw[15]}]
-set_property IOSTANDARD LVCMOS33 [get_ports {sw[15]}]
-
-## LEDs (LD0-LD7 for result, LD8-LD10 for flags)
-set_property PACKAGE_PIN U16 [get_ports {led[0]}]
-set_property IOSTANDARD LVCMOS33 [get_ports {led[0]}]
-set_property PACKAGE_PIN E19 [get_ports {led[1]}]
-set_property IOSTANDARD LVCMOS33 [get_ports {led[1]}]
-set_property PACKAGE_PIN U19 [get_ports {led[2]}]
-set_property IOSTANDARD LVCMOS33 [get_ports {led[2]}]
-set_property PACKAGE_PIN V19 [get_ports {led[3]}]
-set_property IOSTANDARD LVCMOS33 [get_ports {led[3]}]
-set_property PACKAGE_PIN W18 [get_ports {led[4]}]
-set_property IOSTANDARD LVCMOS33 [get_ports {led[4]}]
-set_property PACKAGE_PIN U15 [get_ports {led[5]}]
-set_property IOSTANDARD LVCMOS33 [get_ports {led[5]}]
-set_property PACKAGE_PIN U14 [get_ports {led[6]}]
-set_property IOSTANDARD LVCMOS33 [get_ports {led[6]}]
-set_property PACKAGE_PIN V14 [get_ports {led[7]}]
-set_property IOSTANDARD LVCMOS33 [get_ports {led[7]}]
-
-## Flag LEDs (using LEDs 8, 9, 10)
-set_property PACKAGE_PIN V13 [get_ports flag_zero_led]
-set_property IOSTANDARD LVCMOS33 [get_ports flag_zero_led]
-set_property PACKAGE_PIN V3 [get_ports flag_carry_led]
-set_property IOSTANDARD LVCMOS33 [get_ports flag_carry_led]
-set_property PACKAGE_PIN W3 [get_ports flag_overflow_led]
-set_property IOSTANDARD LVCMOS33 [get_ports flag_overflow_led]
-
-## Buttons
-set_property PACKAGE_PIN U18 [get_ports btnc]
-set_property IOSTANDARD LVCMOS33 [get_ports btnc]
-set_property PACKAGE_PIN T18 [get_ports btnu]
-set_property IOSTANDARD LVCMOS33 [get_ports btnu]
-set_property PACKAGE_PIN W19 [get_ports btnl]
-set_property IOSTANDARD LVCMOS33 [get_ports btnl]
-set_property PACKAGE_PIN T17 [get_ports btnd]
-set_property IOSTANDARD LVCMOS33 [get_ports btnd]
-set_property PACKAGE_PIN U17 [get_ports btnr]
-set_property IOSTANDARD LVCMOS33 [get_ports btnr]
-
-## Configuration options
-set_property CONFIG_VOLTAGE 3.3 [current_design]
-set_property CFGBVS VCCO [current_design]
+module basys3_top(
+    input         clk,      // Board clock
+    input  [15:0] sw,       // 16 switches
+    input         btnC,     // Center button for reset
+    input         btnU,
+    input         btnL,
+    input         btnD,
+    input         btnR,
+    output [7:0]  led,      // 8 LEDs for ALU result
+    output        flag_zero_led,
+    output        flag_carry_led,
+    output        flag_overflow_led
+);
+    wire [3:0] op_code = {btnU, btnL, btnD, btnR};
+    wire [15:0] alu_result;
+    wire zero_flag, carry_flag, overflow_flag;
+    
+    alu my_alu (
+        .clk(clk),
+        .reset(btnC),
+        .enable(1'b1),
+        .a({8'h00, sw[15:8]}),   // Upper 8 switches as operand A, zero-padded
+        .b({8'h00, sw[7:0]}),   // Lower 8 switches as operand B, zero-padded
+        .op_code(op_code),
+        .result(alu_result),
+        .zero_flag(zero_flag),
+        .carry_flag(carry_flag),
+        .overflow_flag(overflow_flag)
+    );
+    
+    assign led = alu_result[7:0];       // Use lower 8 bits for LED output
+    assign flag_zero_led = zero_flag;   // Single LED for zero flag
+    assign flag_carry_led = carry_flag; // Single LED for carry flag
+    assign flag_overflow_led = overflow_flag; // Single LED for overflow flag
+endmodule
