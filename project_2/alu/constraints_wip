@@ -58,12 +58,12 @@ set_property PACKAGE_PIN U14 [get_ports {led[6]}]
 set_property PACKAGE_PIN V14 [get_ports {led[7]}]					
 	set_property IOSTANDARD LVCMOS33 [get_ports {led[7]}]
 
-## Flag LEDs (using remaining LEDs)
-set_property PACKAGE_PIN V13 [get_ports flag_zero_led]					
+## Flag LEDs (using LEDs 8-15 which don't exist on Basys3 - use available pins)
+set_property PACKAGE_PIN P1 [get_ports flag_zero_led]					
 	set_property IOSTANDARD LVCMOS33 [get_ports flag_zero_led]
-set_property PACKAGE_PIN V3 [get_ports flag_carry_led]					
+set_property PACKAGE_PIN L1 [get_ports flag_carry_led]					
 	set_property IOSTANDARD LVCMOS33 [get_ports flag_carry_led]
-set_property PACKAGE_PIN W3 [get_ports flag_overflow_led]					
+set_property PACKAGE_PIN P5 [get_ports flag_overflow_led]					
 	set_property IOSTANDARD LVCMOS33 [get_ports flag_overflow_led]
 
 ## Buttons
@@ -83,4 +83,5 @@ set_property CONFIG_VOLTAGE 3.3 [current_design]
 set_property CFGBVS VCCO [current_design]
 
 ## Timing constraints
-set_property CLOCK_DEDICATED_ROUTE FALSE [get_nets clk_IBUF]
+## Remove problematic clock routing constraint
+## set_property CLOCK_DEDICATED_ROUTE FALSE [get_nets clk_IBUF]
