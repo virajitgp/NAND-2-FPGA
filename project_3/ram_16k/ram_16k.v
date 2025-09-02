@@ -1,4 +1,5 @@
-// RAM16K Module - FPGA Ready
+// RAM16
+//K Module - FPGA Ready
 module RAM16K(
     input wire clk,             // Clock input
     input wire reset,           // Reset input (added for FPGA)
@@ -10,13 +11,9 @@ module RAM16K(
     // 16384 registers, each 16-bit wide
     reg [15:0] memory [0:16383];
     
-    // Initialize memory (for simulation)
-    integer i;
-    initial begin
-        for (i = 0; i < 16384; i = i + 1) begin
-            memory[i] = 16'h0000;
-        end
-    end
+    // Memory is not initialized at power-up. 
+    // The system should be reset after programming the FPGA.
+    // Synthesis tools will infer block RAM, which is uninitialized.
     
     // Synchronous read/write operation
     always @(posedge clk) begin
