@@ -7,7 +7,9 @@ module Computer(
     input wire [15:0] instruction,
     output wire [15:0] outM,
     output wire writeM,
-    output wire [14:0] pc
+    output wire [14:0] pc,
+    output wire zr_out,
+    output wire ng_out
 );
 
     // Wires
@@ -23,7 +25,9 @@ module Computer(
         .outM(outM),
         .writeM(writeM),
         .addressM(addressM),
-        .pc(pc)
+        .pc(pc),
+        .zr_out(zr_out),
+        .ng_out(ng_out)
     );
 
     // Data Memory

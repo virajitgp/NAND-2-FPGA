@@ -11,7 +11,9 @@ module CPU(
     output wire [15:0] outM,
     output wire writeM,
     output wire [14:0] addressM,
-    output wire [14:0] pc
+    output wire [14:0] pc,
+    output wire zr_out,
+    output wire ng_out
 );
 
     // Instruction decoding
@@ -119,5 +121,8 @@ module CPU(
     );
 
     assign pc = pc_out[14:0];
+
+    assign zr_out = alu_zr;
+    assign ng_out = alu_ng;
 
 endmodule
